@@ -205,6 +205,18 @@ def load_generic_dataset(spec):
     eps_temp = torch.reshape(eps_temp / std, (1, -1, 1, 1))
     return X, labels, data_max, data_min, eps_temp, runnerup
 
+def load_veriflow_dataset(spec):
+    """Load MNIST/CIFAR test set with normalization."""
+    print("loading veriflow data.")
+    X = torch.zeros(1,196)
+    labels = torch.zeros(1,dtype=torch.int64)
+    max_val = torch.full((1,1),1000)
+    min_val = torch.full((1,1), -1000)
+    eps = torch.full((1,1,1,1),0.01)
+    runnerup = None
+    return X, labels, max_val, min_val, eps, runnerup
+
+
 
 def load_eran_dataset(spec):
     """Load sampled data and define the robustness region"""

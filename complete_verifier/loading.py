@@ -21,7 +21,7 @@ import numpy as np
 from load_model import load_model, load_model_onnx, Customized  # pylint: disable=unused-import
 from read_vnnlib import read_vnnlib
 from data_utils import load_eran_dataset, load_sdp_dataset
-from data_utils import load_sampled_dataset, load_generic_dataset
+from data_utils import load_sampled_dataset, load_generic_dataset, load_veriflow_dataset
 from data_utils import load_pkl_dataset
 from utils import get_save_path, expand_path
 from specifications import construct_vnnlib
@@ -54,6 +54,8 @@ def load_verification_dataset():
         dataset_method = load_sampled_dataset
     elif "CIFAR" in arguments.Config["data"]["dataset"] or "MNIST" in arguments.Config["data"]["dataset"]:
         dataset_method = load_generic_dataset
+    elif "veriflow" in arguments.Config["data"]["dataset"]:
+        dataset_method = load_veriflow_dataset
     else:
         raise NotImplementedError(
             'Dataset not supported in this file! '
