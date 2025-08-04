@@ -839,3 +839,4 @@ if __name__ == '__main__':
         total_time_ab_crown = time.time() - time_start
         times.append(total_time_ab_crown)
     print(f'Total times: {times}')
+    np.save('abcrown_runtimes.npy', np.array(times, dtype=np.float32))
