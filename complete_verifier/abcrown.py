@@ -570,6 +570,16 @@ class ABCROWN:
             model = model_ori
         return attack(model, x, vnnlib, verified_status, verified_success)
 
+    def view_tensor(self, tensor, name="def"):
+        import random
+        name = f'{name} + {random.randint(1,100)}'
+        import matplotlib.pyplot as plt
+        image = tensor.squeeze(0).permute(1,2,0)
+        image = (image - image.min()) / (image.max() - image.min())  # Min-max scaling
+        plt.imshow(image)
+        plt.savefig(name, bbox_inches='tight', pad_inches=0)
+
+
     def main(self, interm_bounds=None):
         print(f'Experiments at {time.ctime()} on {socket.gethostname()}')
         torch.manual_seed(arguments.Config['general']['seed'])
@@ -692,6 +702,7 @@ class ABCROWN:
 
             model_ori = model_ori.to(device)
             x, data_max, data_min = x.to(device), data_max.to(device), data_min.to(device)
+            #self.view_tensor(x,"view_tensor")
             verified_status, verified_success = 'unknown', False
 
             if arguments.Config['debug']['sanity_check']:
@@ -820,4 +831,11 @@ class ABCROWN:
 
 if __name__ == '__main__':
     abcrown = ABCROWN(args=sys.argv[1:])
-    abcrown.main()
+    exp_count = 1000
+    times = []
+    while sum(times) < 20:
+        time_start = time.time()
+        abcrown.main()
+        total_time_ab_crown = time.time() - time_start
+        times.append(total_time_ab_crown)
+    print(f'Total times: {times}')

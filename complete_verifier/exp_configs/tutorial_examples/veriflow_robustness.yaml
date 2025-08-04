@@ -1,0 +1,29 @@
+# Example of verification of a ONNX model with Linf norm perturbation robustness specification.
+#
+# python abcrown.py --onnx_path ../../vnncomp2021/benchmarks/oval21/nets/cifar_deep_kw.onnx \
+#                  --dataset CIFAR \
+#                  --epsilon 0.00784313725490196 \
+#                  --std 0.225 0.225 0.225 \
+#                  --mean 0.485 0.456 0.406
+general:
+  device: cpu
+  complete_verifier: bab  # skip
+model:
+  # Assuming you have cloned the vnncomp2021 repository: https://github.com/stanleybak/vnncomp2021
+  #onnx_path: /home/mustafa/repos/abcrown/alpha-beta-CROWN/models/other_merged_ir_7_fixed_Mul.onnx  # Path to ONNX model.
+  #onnx_path: /home/mustafa/repos/VeriFlow/experimental_results/conv_flow/mnist_ablation/0_mnist_full_radial_logN/forward.onnx  # Path to ONNX model.
+  #onnx_path: /home/mustafa/repos/abcrown/alpha-beta-CROWN/models/model_conv_modified.onnx  # Path to ONNX model.
+  #onnx_path: /home/mustafa/Documents/midas/conv/conv-without-trans/_trial_b702e_00001_1_batch_size=1024,nonlinearity=ref_ph_842f7f0d_2025-04-01_11-50-16/backward.onnx  # Path to ONNX model.
+  #onnx_path: /home/mustafa/repos/abcrown/alpha-beta-CROWN/models_verify/merged_model.onnx  # Path to ONNX model.
+  onnx_path: /home/mustafa/repos/MarabouClean/neural_nets/mnist_linear_2_flat.onnx
+  # Path to ONNX model.
+  onnx_quirks: null  # Load onnx model with quirks to workaround onnx model issue. This string will be passed to onnx2pytorch as the 'quirks' argument, and it is typically a literal of a python dict, e.g., "{'Reshape': {'fix_batch_size: True'}}".
+data:
+  dataset: UDLRobustness  # Dataset name. This is just the standard CIFAR-10 test set defined in the "load_verification_dataset()" function in utils.py
+specification:
+  norm: .inf  # Linf norm (can also be 2 or 1).attack:
+attack:
+  pgd_order: skip  # Run PGD attack before/after/during incomplete verification, only during input bab, or skip it.
+solver:
+  batch_size: 1
+  bound_prop_method: alpha-crown  # Bound propagation method used for incomplete verification and input split based branch and bound.
